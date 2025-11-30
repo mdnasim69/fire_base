@@ -1,0 +1,5 @@
+class SplashService{
+  void IsLogin(){
+
+  }
+}
