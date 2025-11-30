@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "430187763839",
+    "firebase_url": "https://firefire-3b680-default-rtdb.firebaseio.com",
+    "project_id": "firefire-3b680",
+    "storage_bucket": "firefire-3b680.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430187763839:android:53c48b6f681031b61b874a",
+        "android_client_info": {
+          "package_name": "com.example.fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsbToeRN0Q2tvTbXjSarjMs9qY6erufqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430187763839:android:8409d4916ca3da5f1b874a",
+        "android_client_info": {
+          "package_name": "com.example.fire_base"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsbToeRN0Q2tvTbXjSarjMs9qY6erufqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
