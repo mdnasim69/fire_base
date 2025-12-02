@@ -1,6 +1,10 @@
 import 'dart:async' show Timer;
 
-import 'package:fire_base/Screens/Login_screen.dart';
+import 'package:fire_base/Screens/SignIn.dart';
+import 'package:fire_base/Screens/SignUp_screen.dart';
+import 'package:fire_base/Screens/home_screen.dart';
+import 'package:fire_base/auth/saveUserUID.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,13 +17,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  FirebaseAuth auth =FirebaseAuth.instance;
   @override
   void initState() {
-    Counter();
-
+    asyncInit();
+      Counter();
       MoveToNextScreen();
-
     super.initState();
+  }
+
+  asyncInit()async{
+    await UserUID.getData();
   }
 
   RxInt counter = 5.obs;
@@ -41,11 +49,25 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return LoginScreen();
+          bool res =IsTokenAva();
+          if(!res){
+            return SignInScreen();
+          }else{
+            return Home();
+          }
         },
       ),
       (v) => false,
     );
+  }
+
+  bool IsTokenAva(){
+    User? token =auth.currentUser ;
+    if(token==null){
+      return false;
+    }else{
+      return true;
+    }
   }
 
   @override
