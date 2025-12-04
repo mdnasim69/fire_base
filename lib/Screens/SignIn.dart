@@ -51,9 +51,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     password: _passwordController.text,
                   ).then((v)  async {
                     UserUID.saveData(v.user!.uid);
-                    print('nasim nasim nasim nasim naism////////////');
-                    print(v.user!.uid);
-                    print(UserUID.token.toString());
                     Utils.Message("success", context);
                     Navigator.pushReplacement(
                       context,
