@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   RxInt counter = 5.obs;
 
   Future<void> Counter() async {
-    Timer.periodic(Duration(seconds: 1), (time) {
+   await Timer.periodic(Duration(seconds: 1), (time) {
       if (counter.value == 0) {
         time.cancel();
       } else {

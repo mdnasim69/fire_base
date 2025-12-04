@@ -13,4 +13,10 @@ class UserUID {
     String? uid =preferences.getString('uid');
     token=uid;
   }
+
+  static ClearData()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
+  }
+
 }

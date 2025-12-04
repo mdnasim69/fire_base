@@ -50,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     email: _emailController.text,
                     password: _passwordController.text,
                   ).then((v)  async {
-                    await UserUID.saveData(v.user!.uid);
+                    UserUID.saveData(v.user!.uid);
                     print('nasim nasim nasim nasim naism////////////');
                     print(v.user!.uid);
                     print(UserUID.token.toString());
