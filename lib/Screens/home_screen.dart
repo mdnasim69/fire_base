@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
                   return ListView.builder(
                     itemCount:snapshot.data?.snapshot.children.length,
                     itemBuilder: (context, index) {
-                      return  ListTile(
+                      return ListTile(
                         title: Text(list[index]['title']),
                         subtitle:Text(list[index]["description"]),
                       );
