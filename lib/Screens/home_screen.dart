@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(list[index]['title']),
-                         subtitle:Text(list[index]["description"]),
+                        subtitle:Text(list[index]["description"]),
                       );
                     },
                   );
