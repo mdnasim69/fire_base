@@ -18,6 +18,7 @@ class _HomeState extends State<Home> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   final database = FirebaseDatabase.instance.ref(UserUID.token);
+  TextEditingController searchController =TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,28 +50,47 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: StreamBuilder(
-              stream: database.onValue,
-              builder: (context, snapshot) {
-                if(!snapshot.hasData){
-                 return Center(child:CircularProgressIndicator(),);
-                }else{
-                  Map<dynamic,dynamic> map =snapshot.data!.snapshot.value as dynamic;
-                  List<dynamic> list =[];
-                  list.clear();
-                  list=map.values.toList();
-                  return ListView.builder(
-                    itemCount:snapshot.data?.snapshot.children.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(list[index]['title']),
-                        subtitle:Text(list[index]["description"]),
-                      );
-                    },
-                  );
-                }
-
+          // Expanded(
+          //   child: StreamBuilder(
+          //     stream: database.onValue,
+          //     builder: (context, snapshot) {
+          //       if(!snapshot.hasData){
+          //        return Center(child:CircularProgressIndicator(),);
+          //       }else{
+          //         Map<dynamic,dynamic> map =snapshot.data!.snapshot.value as dynamic;
+          //         List<dynamic> list =[];
+          //         list.clear();
+          //         list=map.values.toList();
+          //         return ListView.builder(
+          //           itemCount:snapshot.data?.snapshot.children.length,
+          //           itemBuilder: (context, index) {
+          //             return ListTile(
+          //               title: Text(list[index]['title']),
+          //               subtitle:Text(list[index]["description"]),
+          //             );
+          //           },
+          //         );
+          //       }
+          //
+          //
+          //     },
+          //   ),
+          // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText:"Search",
+                fillColor:Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide:BorderSide(color: Colors.transparent,width:1),
+                ),
+              ),
+              onChanged: (String v){
+                setState(() {});
 
               },
             ),
@@ -79,14 +99,29 @@ class _HomeState extends State<Home> {
             child: FirebaseAnimatedList(
               query: database,
               itemBuilder: (context, snapshot, animation, index) {
-                return Card(
-                  child: ListTile(
-                    title: Text(snapshot.child('title').value.toString()),
-                    subtitle: Text(
-                      snapshot.child("description").value.toString(),
+                String title =snapshot.child('title').value.toString();
+                if(searchController.text.isEmpty){
+                  return Card(
+                    child: ListTile(
+                      title: Text(snapshot.child('title').value.toString()),
+                      subtitle: Text(
+                        snapshot.child("description").value.toString(),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }else if (title.toLowerCase().contains(searchController.text.trim().toLowerCase())){
+                  return Card(
+                    child: ListTile(
+                      title: Text(snapshot.child('title').value.toString()),
+                      subtitle: Text(
+                        snapshot.child("description").value.toString(),
+                      ),
+                    ),
+                  );
+                }else{
+                  return Container();
+                }
+
               },
             ),
           ),
