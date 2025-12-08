@@ -2,6 +2,7 @@ import 'dart:async' show Timer;
 
 import 'package:fire_base/Screens/SignIn.dart';
 import 'package:fire_base/Screens/SignUp_screen.dart';
+import 'package:fire_base/Screens/firestore_database_view_screen.dart';
 import 'package:fire_base/Screens/home_screen.dart';
 import 'package:fire_base/auth/saveUserUID.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
           if(!res){
             return SignInScreen();
           }else{
-            return Home();
+            return ViewScreen();
           }
         },
       ),
