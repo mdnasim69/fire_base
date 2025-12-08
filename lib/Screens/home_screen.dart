@@ -11,14 +11,21 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() =>  _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   final database = FirebaseDatabase.instance.ref(UserUID.token);
-  TextEditingController searchController =TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  TextEditingController updateController = TextEditingController();
+
+  @override
+  void initState() {
+    database.onValue.listen((l){});
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +38,16 @@ class _HomeState extends State<Home> {
               auth
                   .signOut()
                   .then((v) {
-                    UserUID.ClearData();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => SplashScreen()),
+                UserUID.ClearData();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => SplashScreen()),
                       (predicate) => false,
-                    );
-                  })
+                );
+              })
                   .onError((e, t) {
-                    Utils.Message(e.toString(), context, true);
-                  });
+                Utils.Message(e.toString(), context, true);
+              });
             },
             icon: Icon(Icons.login_outlined),
           ),
@@ -81,17 +88,16 @@ class _HomeState extends State<Home> {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                hintText:"Search",
-                fillColor:Colors.white,
+                hintText: "Search",
+                fillColor: Colors.white,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide:BorderSide(color: Colors.transparent,width:1),
+                  borderSide: BorderSide(color: Colors.transparent, width: 1),
                 ),
               ),
-              onChanged: (String v){
+              onChanged: (String v) {
                 setState(() {});
-
               },
             ),
           ),
@@ -99,29 +105,75 @@ class _HomeState extends State<Home> {
             child: FirebaseAnimatedList(
               query: database,
               itemBuilder: (context, snapshot, animation, index) {
-                String title =snapshot.child('title').value.toString();
-                if(searchController.text.isEmpty){
+                String title = snapshot
+                    .child('title')
+                    .value
+                    .toString();
+                if (searchController.text.isEmpty) {
                   return Card(
                     child: ListTile(
-                      title: Text(snapshot.child('title').value.toString()),
+                      trailing: PopupMenuButton(
+                        child: Icon(Icons.more_vert),
+                        itemBuilder: (context) =>
+                        [
+                          PopupMenuItem(
+                            child: ListTile(
+                              title: Text('Update'),
+                              trailing: Icon(Icons.edit_calendar_outlined),
+                              onTap: () {
+                                Update(snapshot
+                                    .child('id')
+                                    .value
+                                    .toString(), title);
+                              },
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: ListTile(
+                              title: Text('Delete'),
+                              trailing: Icon(Icons.edit_calendar_outlined),
+                              onTap: () {
+                                delete(snapshot
+                                    .child('id')
+                                    .value
+                                    .toString());
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      title: Text(snapshot
+                          .child('title')
+                          .value
+                          .toString()),
                       subtitle: Text(
-                        snapshot.child("description").value.toString(),
+                        snapshot
+                            .child("description")
+                            .value
+                            .toString(),
                       ),
                     ),
                   );
-                }else if (title.toLowerCase().contains(searchController.text.trim().toLowerCase())){
+                } else if (title.toLowerCase().contains(
+                  searchController.text.trim().toLowerCase(),
+                )) {
                   return Card(
                     child: ListTile(
-                      title: Text(snapshot.child('title').value.toString()),
+                      title: Text(snapshot
+                          .child('title')
+                          .value
+                          .toString()),
                       subtitle: Text(
-                        snapshot.child("description").value.toString(),
+                        snapshot
+                            .child("description")
+                            .value
+                            .toString(),
                       ),
                     ),
                   );
-                }else{
+                } else {
                   return Container();
                 }
-
               },
             ),
           ),
@@ -137,5 +189,35 @@ class _HomeState extends State<Home> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void Update(String id, String title) {
+    updateController.text = title;
+    showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            title: Text("Update"),
+            content: TextField(controller: updateController),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('cancel'),
+              ), ElevatedButton(
+                onPressed: () {
+                  database.child(id).update(
+                      {'title': updateController.text.toString()});
+                },
+                child: Text('Update'),
+              ),
+            ],
+          ),
+    );
+  }
+  delete(String id){
+    database.child(id).remove();
+    Navigator.pop(context);
   }
 }
