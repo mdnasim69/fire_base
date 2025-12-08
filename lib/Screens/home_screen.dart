@@ -109,7 +109,7 @@ class _HomeState extends State<Home> {
                     .child('title')
                     .value
                     .toString();
-                if (searchController.text.isEmpty) {
+                if(searchController.text.isEmpty) {
                   return Card(
                     child:  ListTile(
                       trailing: PopupMenuButton(
