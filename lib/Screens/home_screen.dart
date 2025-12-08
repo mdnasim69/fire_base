@@ -122,8 +122,7 @@ class _HomeState extends State<Home> {
                               trailing: Icon(Icons.edit_calendar_outlined),
                               onTap: () {
                                 Update(snapshot
-                                    .child('id')
-                                    .value
+                                    .child('id').value
                                     .toString(), title);
                               },
                             ),
